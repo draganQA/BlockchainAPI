@@ -3,6 +3,7 @@ export interface Wallet {
     address: string;
     balance: number;
     type: string;
+    dateTimeCreated: Date;
 }
 
 export interface UserWallets {

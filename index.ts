@@ -1,6 +1,6 @@
 
 import express, { Request, Response } from 'express';
-import { getRandomCryptocurrencyTicker, userWallets } from './dummy-data';
+import { getRandomCryptocurrencyTicker} from './dummy-data';
 import { generateAddress, getWalletByAddress, getWalletByAddressAndType } from './utils';
 import { dummy } from './dummy-data';
 import { DepositRequest, DepositResponse, Wallet } from './models';
@@ -61,7 +61,8 @@ app.post('/wallet/create', (req: Request, res: Response) => {
       const newWallet = {
           address: generateAddress(token),
           type: token,
-          balance: 0
+          balance: 0,
+          dateTimeCreated: new Date()
       };
 
       dummy[userId].push(newWallet);

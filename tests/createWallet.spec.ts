@@ -35,6 +35,7 @@ test('Create a new wallet and verify the response', async () => {
   expect(body[0]).toHaveProperty('address')
   expect(body[0]).toHaveProperty('balance')
   expect(body[0]).toHaveProperty('type')
+  expect(body[0]).toHaveProperty('dateTimeCreated')
   expect(body[0].balance).toBe(0)
   expect(body[0].type).toEqual(expect.stringContaining("xrp"))
 })
