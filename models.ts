@@ -26,6 +26,13 @@ export interface DepositRequest{
 export interface DepositResponse {
     message: string;
     status: OperationStatus
+    transaction: TransactionHash
+}
+
+export interface TransactionHash{
+    transactionHash: string
+    createdAt: Date,
+    userId: string
 }
 
 export interface ErrorMessage {

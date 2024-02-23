@@ -1,7 +1,7 @@
 
 import express, { Request, Response } from 'express';
 import { getRandomCryptocurrencyTicker} from './dummy-data';
-import { generateAddress, getWalletByAddress, getWalletByAddressAndType } from './utils';
+import { generateAddress, generateTransactionHash, getWalletByAddress, getWalletByAddressAndType } from './utils';
 import { dummy } from './dummy-data';
 import { DepositRequest, DepositResponse, Wallet } from './models';
 
@@ -106,6 +106,11 @@ app.post('/wallet/deposit', (req: Request, res: Response) => {
   return res.status(200).json({
       message: `Deposited ${amount} to ${destinationWallet.address}`,
       status: "success",
+      transaction: {
+        transactionHash : generateTransactionHash(),
+        createdAt: new Date(),
+        userId: "UserId"
+      } 
   });
 });
 

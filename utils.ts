@@ -7,6 +7,11 @@ export function generateAddress(token: string): string {
     return `${token}:${crypto.createHash('sha256').update(randomBuffer).digest('hex')}`;
   }
 
+  export function generateTransactionHash(): string {
+    const randomBuffer = crypto.randomBytes(16);
+    return `${crypto.createHash('sha256').update(randomBuffer).digest('hex')}`;
+  }
+
   export function generateUserId(): string {
     const userId = randomstring.generate({
         length: 10,
