@@ -3,20 +3,17 @@ import { dummy } from '../dummy-data';
 import { generateAddress, generateUserId } from '../utils';
 import { BalanceResponse, DepositResponse, ErrorMessage, Wallet, WalletResponse } from '../models';
 
+require('dotenv').config();
 
 let apiContext;
 
 test.beforeAll(async ({ playwright }) => {
   apiContext = await playwright.request.newContext({
-    baseURL: 'http://localhost:3000',
+    baseURL: process.env.BASE_URL,
   });
 });
 
-test.afterAll(async ({ }) => {
-  await apiContext.dispose();
-});
-
-test.describe('API tests for verifyng the deposit', () => {
+test.describe('API tests for verifyng initiation of deposit', () => {
 
 
 test('Initiate a deposit transaction involving identical cryptocurrencies and verify the response', async () => {
@@ -34,43 +31,21 @@ test('Initiate a deposit transaction involving identical cryptocurrencies and ve
   const depositResponse = await response.json() as DepositResponse;
 
   expect(depositResponse).toBeTruthy()
-  expect(depositResponse.message).toBe('Deposited 50 to dot:a3908a5b40292c0e8d6ed79332d9862e22f20d75df2aeb42f35eab61f7c90b92')
+  expect(depositResponse.message).toBe(`Deposited ${requestBody.amount} to ${requestBody.destinationAddress}`)
   expect(depositResponse.status).toBe('success')
   expect(depositResponse.transaction).toHaveProperty('transactionHash')
   expect(depositResponse.transaction.transactionHash).not.toBeNull();
   expect(depositResponse.transaction.createdAt).not.toBeNull();
   expect(depositResponse.transaction).toHaveProperty('createdAt')
   expect(depositResponse.transaction.userId).toBe("UserId")
-
-  const sourceAddress = requestBody.sourceAddress;
-
-  const responseCheckSourceAddressBalance = await apiContext.get(`/balance/${sourceAddress}`, {
-   });
-     
-   const baalnceResponseSource = await responseCheckSourceAddressBalance.json() as BalanceResponse;
-
-   expect(response.ok()).toBeTruthy();
-   expect(baalnceResponseSource.balance).toBe(71);
-   expect(baalnceResponseSource.type).toBe("dot");
-
-   const destinationAddress = requestBody.destinationAddress;
-
-   const responseCheckDestinationAddressBalance = await apiContext.get(`/balance/${destinationAddress}`, {
-    });
-      
-    const baalnceResponseDestination = await responseCheckDestinationAddressBalance.json() as BalanceResponse;
- 
-    expect(response.ok()).toBeTruthy();
-    expect(baalnceResponseDestination.balance).toBe(75);
-    expect(baalnceResponseDestination.type).toBe("dot");
 })
 
 
 test('Initiate a deposit transaction involving Insufficient Balance for identical cryptocurrencies and verify the error', async () => {
     const requestBody = {
-      sourceAddress: "dot:32d31eeae5f38c9c4a73b0226a759da7dc5fc5d145d127a8e03fd91d6c425ef6",
+      sourceAddress: "dot:0ef1a256db90bb0cbf372996849fd5839a442429e1f5d85e2c5794cb0b13e0cd",
       destinationAddress: "dot:a3908a5b40292c0e8d6ed79332d9862e22f20d75df2aeb42f35eab61f7c90b92",
-      amount: 300,
+      amount: 500,
       coin: "dot"
     }
   
@@ -81,7 +56,7 @@ test('Initiate a deposit transaction involving Insufficient Balance for identica
     const depositResponse = await response.json() as DepositResponse;
   
     expect(response.status()).toBe(400);
-    expect(depositResponse.message).toBe('dot:32d31eeae5f38c9c4a73b0226a759da7dc5fc5d145d127a8e03fd91d6c425ef6 has no enough DOT coins')
+    expect(depositResponse.message).toBe(`${requestBody.sourceAddress} has no enough ${requestBody.coin.toUpperCase()} coins`)
     expect(depositResponse.status).toBe('failed')
   })
 

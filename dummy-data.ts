@@ -20,7 +20,7 @@ export let dummy = {
     "user596": [
         {
             "address": "dot:32d31eeae5f38c9c4a73b0226a759da7dc5fc5d145d127a8e03fd91d6c425ef6",
-            "balance": 121,
+            "balance": 1215678765,
             "type": "dot",
             "dateTimeCreated": new Date("2023-05-15T10:30:00Z")
         }

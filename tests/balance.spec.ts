@@ -3,16 +3,14 @@ import { dummy } from '../dummy-data';
 import { generateAddress } from '../utils';
 import { BalanceResponse, ErrorMessage, Wallet, WalletResponse } from '../models';
 
+require('dotenv').config();
+
 let apiContext;
 
 test.beforeAll(async ({ playwright }) => {
   apiContext = await playwright.request.newContext({
-    baseURL: 'http://localhost:3000',
+    baseURL: process.env.BASE_URL,
   });
-});
-
-test.afterAll(async ({ }) => {
-  await apiContext.dispose();
 });
 
 test.describe('API tests for verifyng the balance', () => {
